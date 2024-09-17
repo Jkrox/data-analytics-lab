@@ -18,6 +18,6 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 COPY . ${APP_HOME}
 
 # Expose the port
-EXPOSE 8000
+EXPOSE 8501
 
-CMD ["streamlit", "run", "src/streamlit_app.py"]
+CMD ["streamlit", "run", "Home.py"]

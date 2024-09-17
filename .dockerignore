@@ -1,0 +1,6 @@
+.venv
+__pycache__
+sales_last_quarter.csv
+uv.lock
+pyproject.toml
+poetry.lockw

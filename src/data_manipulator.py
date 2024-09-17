@@ -32,22 +32,22 @@ def get_sales_last_quarter(df: pd.DataFrame) -> pd.DataFrame:
     """
     # Convert the date column to datetime
     df["fecha_venta"] = pd.to_datetime(df["fecha_venta"])
-    # Get the last date in the dataframe
-    last_date = df["fecha_venta"].max()
-    # Calculate the start date of the last quarter
-    start_date_last_quarter = last_date - pd.DateOffset(months=3)
-    # Filter the dataframe for the last quarter
-    last_quarter_df = df[(df["fecha_venta"] >= start_date_last_quarter)]
-    # Group by country, product, and product category, then sum the sales
-    grouped_data = last_quarter_df.groupby(
-        ["fecha_venta", "pais", "producto", "categoria_producto"]
-    ).sum(numeric_only=True)
-    grouped_data = grouped_data.reset_index()
-    grouped_data = grouped_data.sort_values(
-        by=["pais", "producto", "categoria_producto"]
-    )
-
-    return grouped_data
+    
+    # Get the last quarter date range
+    last_quarter = df["fecha_venta"].max() - pd.DateOffset(months=3)
+    
+    # Filter the data for the last quarter
+    last_quarter_data = df[df["fecha_venta"] >= last_quarter]
+    
+    # Calculate the sales for each row
+    last_quarter_data["ventas"] = last_quarter_data["cantidad_vendida"] * last_quarter_data["precio_unitario"]
+    
+    # Group by date and country and sum the sales
+    sales_last_quarter = last_quarter_data.groupby(["fecha_venta", "pais"]).agg({
+        "ventas": "sum"
+    }).reset_index()
+    
+    return sales_last_quarter
 
 
 def get_total_sales_by_product_and_customer(
